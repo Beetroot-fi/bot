@@ -1,6 +1,5 @@
-from pydantic.v1 import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel
+from pydantic import BaseModel, PostgresDsn
 
 
 class DatabaseSettings(BaseModel):
