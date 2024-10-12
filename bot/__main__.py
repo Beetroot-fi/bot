@@ -2,9 +2,12 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode, ChatType
 from aiogram import Bot, Dispatcher
 
-from filters import ChatTypeFilter
+from middlewares.database import DatabaseMiddleware
 
+from core.models import session_factory
 from core.config import settings
+
+from filters import ChatTypeFilter
 
 from routers import router
 
@@ -24,6 +27,7 @@ async def main():
     dp = Dispatcher()
     dp.include_router(router)
     dp.message.filter(ChatTypeFilter(chat_types=[ChatType.PRIVATE]))
+    dp.update.middleware(DatabaseMiddleware(session_pool=session_factory))
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
