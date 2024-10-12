@@ -1,9 +1,9 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel
 
 
 class DatabaseSettings(BaseModel):
-    url: PostgresDsn
+    url: str
     echo: bool = False
     echo_pool: bool = False
     pool_size: int = 50
