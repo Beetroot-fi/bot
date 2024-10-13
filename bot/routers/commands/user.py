@@ -10,7 +10,7 @@ router = Router(name=__name__)
 
 
 @router.message(CommandStart())
-async def start_cme(message: types.Message, session: AsyncSession):
+renamasync def start_cmd(message: types.Message, session: AsyncSession):
     user = await user_crud.get_user_by_tg_id(session, message.from_user.id)
     if not user:
         await user_crud.create_user(session, message.from_user.id)
