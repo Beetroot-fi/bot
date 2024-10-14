@@ -16,7 +16,7 @@ async def start_cmd(message: types.Message, session: AsyncSession):
         await user_crud.create_user(session, message.from_user.id)
     try:
         tg_id = int(decode_payload(message.text.split("/start")[1].strip()))
-        if tg_id != message.from_user.id and user.referral_id is None:
+        if tg_id != message.from_user.id:
             await user_crud.update_user(
                 session=session,
                 tg_id=message.from_user.id,
