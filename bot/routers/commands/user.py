@@ -32,7 +32,7 @@ async def start_cmd(message: types.Message, session: AsyncSession):
     await message.answer(
         text=(
             "Beetroot Finance is an automated yield farming aggregator on TON blockchain 💎"
-            "\n\nMaximize your earnings and sleep tight 👇🏼"
-            f"\n\nYour referral link <code>\n{ref_link}</code>"
+            "\n\nFollow @BeetrootFinance"
+            f"\n\nand invite your friends👇🏼\n<code>{ref_link}</code>"
         ),
     )
