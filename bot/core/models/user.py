@@ -6,5 +6,5 @@ from .base import Base
 
 
 class User(Base, UuidPkMixin):
-    tg_id: Mapped[int] = mapped_column(BigInteger)
+    tg_id: Mapped[int] = mapped_column(BigInteger, unique=True)
     referral_id: Mapped[int | None] = mapped_column(BigInteger)
