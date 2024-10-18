@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     )
 
     bot_token: str
+    admins: list[int]
     db: DatabaseSettings
 
 
