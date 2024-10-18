@@ -18,6 +18,10 @@ async def get_user_by_tg_id(session: AsyncSession, tg_id: int) -> User | None:
     return await session.scalar(select(User).where(User.tg_id == tg_id))
 
 
+async def get_all_users(session: AsyncSession) -> list[User]:
+    return list(await session.scalars(select(User)))
+
+
 async def update_user(session: AsyncSession, tg_id: int, **kwargs) -> None:
     await session.execute(update(User).where(User.tg_id == tg_id).values(**kwargs))
     await session.commit()
