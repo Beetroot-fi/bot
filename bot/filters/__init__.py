@@ -1,7 +1,3 @@
-__all__ = (
-    "ChatTypeFilter",
-    "IsAdminFilter",
-)
+__all__ = ("ChatTypeFilter",)
 
 from .chat_type import ChatTypeFilter
-from .is_admin import IsAdminFilter
