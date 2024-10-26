@@ -3,6 +3,8 @@ from aiogram import types
 
 
 class ChatTypeFilter(Filter):
+    """Filtering bot answers by chat type"""
+
     def __init__(self, chat_types: list[str]) -> None:
         self.chat_types = chat_types
 
