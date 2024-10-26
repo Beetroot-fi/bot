@@ -12,3 +12,5 @@ COPY . .
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app/bot
+
+CMD poetry run python -m bot
