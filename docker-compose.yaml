@@ -1,0 +1,24 @@
+networks:
+  app:
+
+services:
+  bot:
+    build:
+      context: .
+    container_name: bot
+    env_file:
+      - bot/.env
+    depends_on:
+      - redis
+    restart: always
+    networks:
+      app:
+
+  redis:
+    image: redis:alpine
+    container_name: redis-bot
+    restart: always
+    env_file:
+      - bot/.env
+    networks:
+      app:
