@@ -2,7 +2,9 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode, ChatType
 from aiogram import Bot, Dispatcher
 
+from utils.scheduled_jobs import add_jobs, scheduler
 from utils.log import setup_logging
+from utils.redis import redis
 
 from core.config import settings
 
@@ -12,6 +14,10 @@ from routers import router
 
 import asyncio
 import logging
+
+
+async def on_shutdown(bot: Bot):
+    await redis.aclose()
 
 
 async def main():
@@ -25,8 +31,13 @@ async def main():
         ),
     )
 
-    dp = Dispatcher()
+    scheduler.start()
+
+    add_jobs(redis=redis)
+
+    dp = Dispatcher(r=redis)
     dp.include_router(router)
+    dp.shutdown.register(on_shutdown)
     dp.message.filter(ChatTypeFilter(chat_types=[ChatType.PRIVATE]))
 
     await bot.delete_webhook(drop_pending_updates=True)
@@ -34,5 +45,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    setup_logging(level=logging.WARNING)
+    setup_logging(level=logging.INFO)
     asyncio.run(main())
