@@ -1,4 +1,14 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import BaseModel
+
+
+class RedisConfig(BaseModel):
+    """Redis configuration"""
+
+    host: str
+    port: int
+    decode_responses: bool = True
+
 
 
 class Settings(BaseSettings):
@@ -12,6 +22,8 @@ class Settings(BaseSettings):
     )
 
     bot_token: str
+    redis: RedisConfig
+    mnemonics: list[str]
 
 
 settings = Settings()
