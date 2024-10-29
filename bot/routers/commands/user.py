@@ -1,7 +1,10 @@
-from utils.ref_link import create_ref_link
-
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
+from aiogram.fsm.context import FSMContext
 from aiogram import Router, types
+
+from states.user import GettingWalletAddressState
+
+from utils.ref_link import create_ref_link
 
 router = Router(name=__name__)
 
@@ -23,10 +26,22 @@ async def start_cmd(message: types.Message):
             inline_keyboard=[
                 [
                     types.InlineKeyboardButton(
-                        text="launch",
+                        text="Launch",
                         web_app=types.WebAppInfo(url="https://app.beetroot.finance"),
                     )
                 ]
             ]
         ),
+    )
+
+
+@router.message(Command("get"))
+async def get_usdt(message: types.Message, state: FSMContext):
+    await state.set_state(GettingWalletAddressState.wallet_address)
+    await message.answer(
+        text=(
+            "Enter wallet address (format: raw or base64):"
+            "\n\nExample:"
+            "\n<code>0QCSES0TZYqcVkgoguhIb8iMEo4cvaEwmIrU5qbQgnN8fo2A</code>"
+        )
     )
