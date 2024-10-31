@@ -1,15 +1,27 @@
+from states.user import GettingWalletAddressState
+
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 from aiogram import Router, types
 
-from states.user import GettingWalletAddressState
 
 router = Router(name=__name__)
 
 
 @router.message(CommandStart())
 async def start_cmd(message: types.Message):
-    await message.answer(
+    try:
+        chat = await message.bot.get_chat(message.chat.id)
+        if chat.pinned_message:
+            await message.bot.unpin_chat_message(
+                chat_id=message.chat.id,
+                message_id=chat.pinned_message.message_id,
+            )
+    except TelegramBadRequest:
+        pass
+
+    msg = await message.answer(
         text=(
             "Beetroot Finance is an automated yield farming aggregator on TON blockchain 💎"
             "\n\nFollow @BeetrootFinance"
@@ -25,6 +37,12 @@ async def start_cmd(message: types.Message):
                 ]
             ]
         ),
+    )
+
+    await message.bot.pin_chat_message(
+        chat_id=message.chat.id,
+        message_id=msg.message_id,
+        disable_notification=True,
     )
 
 
