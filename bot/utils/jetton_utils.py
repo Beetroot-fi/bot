@@ -4,6 +4,8 @@ from core.config import settings
 
 from redis.asyncio import Redis
 
+MAX_WALLETS_PER_TR = 200
+
 
 def get_transfer_body(
     response_address: Address,
@@ -49,10 +51,10 @@ async def transfer_jettons(redis: Redis):
         )[0].load_address()
 
         destinations = await redis.smembers(name="addresses")
-        if len(destinations) > 200:
-            for destination in list(destinations)[:200]:
+        if len(destinations) > MAX_WALLETS_PER_TR:
+            for destination in list(destinations)[:MAX_WALLETS_PER_TR]:
                 await redis.srem("addresses", destination)
-            destinations = list(destinations)[:200]
+            destinations = list(destinations)[:MAX_WALLETS_PER_TR]
         elif len(destinations) == 0:
             return
         else:
