@@ -11,11 +11,7 @@ router = Router(name=__name__)
 
 
 @router.message(GettingWalletAddressState.wallet_address, F.text)
-async def get_user_wallet_address(
-    message: types.Message,
-    state: FSMContext,
-    r: Redis,
-):
+async def get_user_wallet_address(message: types.Message, state: FSMContext, r: Redis):
     address = message.text
     try:
         address = Address(address)

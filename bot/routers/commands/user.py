@@ -21,23 +21,23 @@ async def start_cmd(message: types.Message):
     except TelegramBadRequest:
         pass
 
-    msg = await message.answer(
-        text=(
-            "Beetroot Finance is an automated yield farming aggregator on TON blockchain 💎"
-            "\n\nFollow @BeetrootFinance"
-            f"\n\nTo get TESTNET USDT send /get"
-        ),
-        reply_markup=types.InlineKeyboardMarkup(
-            inline_keyboard=[
-                [
-                    types.InlineKeyboardButton(
-                        text="Launch",
-                        web_app=types.WebAppInfo(url="https://app.beetroot.finance"),
-                    )
-                ]
-            ]
-        ),
+    text = (
+        "Beetroot Finance is an automated yield farming aggregator on TON blockchain 💎"
+        "\n\nFollow @BeetrootFinance"
+        f"\n\nTo get TESTNET USDT send /get"
     )
+    reply_markup = types.InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                types.InlineKeyboardButton(
+                    text="Launch",
+                    web_app=types.WebAppInfo(url="https://app.beetroot.finance/"),
+                )
+            ]
+        ]
+    )
+
+    msg = await message.answer(text=text, reply_markup=reply_markup)
 
     await message.bot.pin_chat_message(
         chat_id=message.chat.id,
