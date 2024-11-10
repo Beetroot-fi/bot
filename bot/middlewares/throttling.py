@@ -5,10 +5,23 @@ from typing import Callable, Awaitable, Any
 
 from redis.asyncio import Redis
 
+import time
+
 
 class ThrottlingMiddleware(BaseMiddleware):
-    def __init__(self, redis: Redis):
+    def __init__(
+        self,
+        redis: Redis,
+        window_size: int = 7,
+        window_seconds: int = 10,
+        mute_seconds: int = 30,
+        key_ttl: int = 120,
+    ):
         self.redis = redis
+        self.window_size = window_size
+        self.window_seconds = window_seconds
+        self.mute_seconds = mute_seconds
+        self.key_ttl = key_ttl
 
     async def __call__(
         self,
@@ -18,14 +31,23 @@ class ThrottlingMiddleware(BaseMiddleware):
     ) -> Any:
         user = f"user:{event.from_user.id}"
 
-        check_user = await self.redis.get(name=user)
+        if await self.redis.exists(f"{user}:muted"):
+            return await event.answer("Stop spam.")
 
-        if check_user:
-            if int(check_user) == 1:
-                await self.redis.set(name=user, value=0, ex=60)
-                return await event.answer(text="Stop spam, mute for 1 minute.")
-            return
+        current_time = time.time()
 
-        await self.redis.set(name=user, value=1, ex=60)
+        await self.redis.lpush(user, current_time)
+        await self.redis.ltrim(user, 0, self.window_size - 1)
+        await self.redis.expire(user, self.key_ttl)
+
+        timestamps = await self.redis.lrange(user, 0, -1)
+
+        if len(timestamps) >= self.window_size:
+            oldest_time = float(timestamps[-1])
+            if current_time - oldest_time <= self.window_seconds:
+                await self.redis.set(f"{user}:muted", 1, ex=self.mute_seconds)
+                return await event.answer(
+                    f"Stop spam, mute for {self.mute_seconds} seconds."
+                )
 
         return await handler(event, data)
