@@ -6,9 +6,11 @@ from utils.scheduled_jobs import add_jobs, scheduler
 from utils.log import setup_logging
 from utils.redis import redis
 
-from core.config import settings
+from middlewares import ThrottlingMiddleware
 
 from filters import ChatTypeFilter
+
+from core.config import settings
 
 from routers import router
 
@@ -39,6 +41,7 @@ async def main():
     dp.include_router(router)
     dp.shutdown.register(on_shutdown)
     dp.message.filter(ChatTypeFilter(chat_types=[ChatType.PRIVATE]))
+    dp.message.middleware.register(ThrottlingMiddleware(redis=redis))
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
