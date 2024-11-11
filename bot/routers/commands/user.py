@@ -1,10 +1,9 @@
-from states.user import GettingWalletAddressState
+from states.user import GettingWalletAddressState, GettingReportMessageState
 
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 from aiogram import Router, types
-
 
 router = Router(name=__name__)
 
@@ -56,3 +55,9 @@ async def get_usdt(message: types.Message, state: FSMContext):
             "\n<code>0QCSES0TZYqcVkgoguhIb8iMEo4cvaEwmIrU5qbQgnN8fo2A</code>"
         )
     )
+
+
+@router.message(Command("report"))
+async def report(message: types.Message, state: FSMContext):
+    await state.set_state(GettingReportMessageState.report_msg)
+    await message.answer(text="write a report text")
