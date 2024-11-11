@@ -10,7 +10,6 @@ class RedisConfig(BaseModel):
     decode_responses: bool = True
 
 
-
 class Settings(BaseSettings):
     """Bot configuration"""
 
@@ -22,6 +21,7 @@ class Settings(BaseSettings):
     )
 
     bot_token: str
+    admins: list[int]
     redis: RedisConfig
     mnemonics: list[str]
 
