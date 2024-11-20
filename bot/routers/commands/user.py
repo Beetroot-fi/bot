@@ -1,4 +1,4 @@
-from states.user import GettingWalletAddressState, GettingReportMessageState
+from states.user import GettingReportMessageState
 
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import CommandStart, Command
