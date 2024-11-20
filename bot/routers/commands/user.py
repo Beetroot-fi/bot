@@ -45,18 +45,6 @@ async def start_cmd(message: types.Message):
     )
 
 
-@router.message(Command("get"))
-async def get_usdt(message: types.Message, state: FSMContext):
-    await state.set_state(GettingWalletAddressState.wallet_address)
-    await message.answer(
-        text=(
-            "Enter wallet address (format: raw or base64):"
-            "\n\nExample:"
-            "\n<code>0QCSES0TZYqcVkgoguhIb8iMEo4cvaEwmIrU5qbQgnN8fo2A</code>"
-        )
-    )
-
-
 @router.message(Command("report"))
 async def report(message: types.Message, state: FSMContext):
     await state.set_state(GettingReportMessageState.report_msg)
