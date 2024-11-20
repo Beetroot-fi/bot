@@ -2,7 +2,6 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode, ChatType
 from aiogram import Bot, Dispatcher
 
-from utils.scheduled_jobs import add_jobs, scheduler
 from utils.log import setup_logging
 from utils.redis import redis
 
@@ -33,11 +32,7 @@ async def main():
         ),
     )
 
-    scheduler.start()
-
-    add_jobs(redis=redis)
-
-    dp = Dispatcher(r=redis)
+    dp = Dispatcher()
     dp.include_router(router)
     dp.shutdown.register(on_shutdown)
     dp.message.filter(ChatTypeFilter(chat_types=[ChatType.PRIVATE]))
