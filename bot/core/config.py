@@ -23,7 +23,6 @@ class Settings(BaseSettings):
     bot_token: str
     admins: list[int]
     redis: RedisConfig
-    mnemonics: list[str]
 
 
 settings = Settings()
