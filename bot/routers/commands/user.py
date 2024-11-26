@@ -22,7 +22,7 @@ async def start_cmd(message: types.Message):
     except TelegramBadRequest:
         pass
 
-    ref_link = create_ref_link(message.bot, str(message.from_user.id), "app")
+    ref_link = await create_ref_link(message.bot, str(message.from_user.id), "app")
     text = (
         "\n\nBeetroot Finance is an automated yield farming aggregator on TON blockchain"
         "\n\nFollow @BeetrootFinance"
