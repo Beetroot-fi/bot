@@ -27,7 +27,7 @@ async def start_cmd(message: types.Message):
         "\n\nBeetroot Finance is an automated yield farming aggregator on TON blockchain"
         "\n\nFollow @BeetrootFinance"
         "\nand invite your friends👇🏼"
-        f"{ref_link}"
+        f"\n{ref_link}"
     )
     reply_markup = types.InlineKeyboardMarkup(
         inline_keyboard=[
