@@ -15,5 +15,5 @@ async def get_report_msg(message: types.Message, state: FSMContext):
             chat_id=admin,
             text=f"reported from @{message.from_user.username}\n\ntext:\n{message.text}",
         )
-    await message.answer("thanks for report")
+    await message.answer("Thanks! We will be back with the solution ASAP.")
     await state.clear()

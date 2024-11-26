@@ -5,6 +5,8 @@ from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 from aiogram import Router, types
 
+from utils.ref_link import create_ref_link
+
 router = Router(name=__name__)
 
 
@@ -20,9 +22,12 @@ async def start_cmd(message: types.Message):
     except TelegramBadRequest:
         pass
 
+    ref_link = create_ref_link(message.bot, str(message.from_user.id), "app")
     text = (
-        "Beetroot Finance is an automated yield farming aggregator on TON blockchain 💎"
+        "\n\nBeetroot Finance is an automated yield farming aggregator on TON blockchain"
         "\n\nFollow @BeetrootFinance"
+        "\nand invite your friends👇🏼"
+        f"{ref_link}"
     )
     reply_markup = types.InlineKeyboardMarkup(
         inline_keyboard=[
@@ -47,4 +52,7 @@ async def start_cmd(message: types.Message):
 @router.message(Command("report"))
 async def report(message: types.Message, state: FSMContext):
     await state.set_state(GettingReportMessageState.report_msg)
-    await message.answer(text="write a report text")
+    await message.answer(
+        text="Please submit your report for any problems you’ve experienced with our protocol."
+        "\n\nFeedback is also welcomed."
+    )
